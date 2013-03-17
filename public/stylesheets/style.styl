@@ -17,7 +17,7 @@ list-cont-height = 0.76875px * list-cont-width
 list-ul-height = list-cont-height - 34px
 list-li-width = list-cont-width - 13px
 
-threepart-size = list-cont-width + 20px
+threepart-size = list-cont-width + 40px
 
 body
 	background-color bg-color
@@ -92,11 +92,20 @@ body
 
 .login
 	background-image url('/images/loginoverlay.png')
-	width 458px
-	height 186px
+	background-size 100%
+	background-repeat no-repeat
+	width 468px
+	height 190px
 	margin auto
 	margin-top 200px
-	padding 50px 75px
+	padding-left 15px
+	padding-top 17px
+	padding-right 5px
+	padding-bottom 50px
+	
+
+	input.smallbutton
+		margin-right 4px !important
 
 input
 	outline none
@@ -131,12 +140,14 @@ input.smallbutton
 	height 55px
 	padding-right 10px
 	padding-bottom 10px
-	font-size 20px
-	margin-right -5px
+	font-size 22px
+	margin-right -18px
+
+.horiz
+	margin-right 5px !important
 
 .vertmargin
 	margin-top 20px
-
 .right
 	float right
 
@@ -161,7 +172,6 @@ input.smallbutton
 	padding-left 17px
 	padding-right 10px
 	padding-top 10px
-	margin auto
 
 	ul
 		width 100%
@@ -192,9 +202,32 @@ input.smallbutton
 	float left
 	width 33%
 	min-width threepart-size
-
-.threepartinner
-	margin auto
+.inner
 	width 430px
-	padding-right 18px
-	overflow hidden
+	margin auto
+
+h2
+	font-family 'Quicksand'
+	font-size 26px
+	margin-bottom 10px
+	margin-left 15px
+	color #fff
+
+.sec
+	margin-top 35px
+	padding-top 15px
+	padding-bottom 100px
+	padding-left 15px	
+	margin-left -15px
+	padding-right 25px
+	margin-right -25px
+
+    .sec.large    	
+		background-image url('/images/secbglarge.png')
+		background-size 100%
+		background-repeat no-repeat
+		
+	.sec.small		
+		background-image url('/images/secbgsmall.png')
+		background-size 100%
+		background-repeat no-repeat

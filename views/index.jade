@@ -2,31 +2,48 @@ extends layout
 block main-content
 	.threepartcont
 		.aleft
-			.listContainer
-				ul
-					li
-						span Operating account
-						span(class='right') 10000 kr
-					li
-						span Revenue account
-						span(class='right') 55000 kr
-		.acenter
-			.listContainer
-				ul
-					li
-						span Operating account
-						span(class='right') 10000 kr
-					li
-						span Revenue account
-						span(class='right') 55000 kr
+			.inner
+				h2 accounts
+				.listContainer
+					ul
+						li
+							span Operating account
+							span(class='right') 10000 kr
+						li
+							span Revenue account
+							span(class='right') 55000 kr
+		.acenter			
+			.inner
+				h2 outgoing transfers
+				.listContainer
+					ul
+						li
+							span Operating account
+							span(class='right') 10000 kr
+						li
+							span Revenue account
+							span(class='right') 55000 kr
+
+				.sec(class='large')
+					h2 book transfer
+					input(type='text', class='largetext', placeholder='sender passport id')
+					input(type='text', class='largetext vertmargin', placeholder='recipient passport id')
+					input(type='text', class='largetext vertmargin', placeholder='recipient kiosk')
+					input(type='submit', class='smallbutton vertmargin right', value='book')
 		.aright
-			.listContainer
-				ul
-					li
-						span Operating account
-						span(class='right') 10000 kr
-					li
-						span Revenue account
-						span(class='right') 55000 kr
-			.threepartinner
-				input(type='text', class='largetext', placeholder='kiosk id', autofocus)
+			.inner			
+				h2 pending payouts	
+				.listContainer
+					ul
+						li
+							span Operating account
+							span(class='right') 10000 kr
+						li
+							span Revenue account
+							span(class='right') 55000 kr
+
+				.sec(class='small')
+					h2 record payout
+					input(type='text', class='largetext', placeholder='recipient passport id')				
+					input(type='submit', class='smallbutton vertmargin right', value='payout')
+					input(type='submit', class='smallbutton vertmargin right horiz', value='check owing')				
