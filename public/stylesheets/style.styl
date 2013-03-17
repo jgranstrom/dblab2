@@ -1,0 +1,200 @@
+@import 'nib'
+
+@import url('http://fonts.googleapis.com/css?family=Quicksand')
+@import url('http://fonts.googleapis.com/css?family=Atomic+Age')
+@import url('http://fonts.googleapis.com/css?family=Nova+Square')
+
+global-reset()
+
+// Background constants
+bg-color = #53627A
+topbar-height-total = 204px
+topbar-height = 127px
+bottomoverlay-height = 186px
+
+list-cont-width = 420px
+list-cont-height = 0.76875px * list-cont-width
+list-ul-height = list-cont-height - 34px
+list-li-width = list-cont-width - 13px
+
+threepart-size = list-cont-width + 20px
+
+body
+	background-color bg-color
+	//overflow hidden //brutal crap
+
+.bgoverlay
+	background-image url('/images/bgoverlay.png')
+	background-repeat no-repeat
+	position fixed
+	top 0
+	bottom 0
+	left 0
+	right 0
+
+.topbar
+	background-image url('/images/topbarbg.png')
+	position absolute
+	height topbar-height-total
+	left 0
+	right 0
+
+	.title
+		white-space nowrap
+		color #fff		
+		font-family 'Quicksand'
+		padding-left 50px
+		padding-top 25px
+
+		h1
+			font-size 60px		
+		h2
+			font-size 30px		
+			padding-left 42px		
+			margin-top -5px
+
+	.content
+		position absolute
+		height topbar-height
+		left 0
+		right 0
+		top 0
+
+.bottomoverlay
+	background-image url('/images/bottomoverlay.png')
+	position fixed
+	height bottomoverlay-height
+	bottom 0
+	left 0
+	right 0
+
+.inner-content
+	position absolute
+	top topbar-height-total
+	left 0
+	right 0
+	bottom 0
+	min-height 600px
+
+.infobar
+	color #fff		
+	font-family 'Quicksand'
+	text-align center
+	font-size 26px
+	background-image url('/images/infooverlay.png')
+	position absolute
+	left 0
+	right 0
+	height 77px
+	line-height 77px
+	white-space nowrap
+
+
+.login
+	background-image url('/images/loginoverlay.png')
+	width 458px
+	height 186px
+	margin auto
+	margin-top 200px
+	padding 50px 75px
+
+input
+	outline none
+	border 0px solid #000000 
+	background-color transparent
+
+input.smalltext
+	background-image url('/images/inputbgsmall.png')
+	height 49px	
+	width 428px
+	padding-left 15px
+	padding-right 20px
+	padding-bottom 5px
+	font-size 20px
+	color #3c3c3c	
+
+input.largetext
+	background-image url('/images/inputbglarge.png')
+	height 49px	
+	width list-cont-width - 20px
+	padding-left 15px
+	padding-right 30px
+	padding-bottom 5px
+	font-size 20px
+	color #3c3c3c	
+
+input.smallbutton
+	font-family 'Quicksand'
+	color #fff  
+	background-image url('/images/buttonsmall.png')
+	width 170px
+	height 55px
+	padding-right 10px
+	padding-bottom 10px
+	font-size 20px
+	margin-right -5px
+
+.vertmargin
+	margin-top 20px
+
+.right
+	float right
+
+.footer
+	position fixed
+	color #fff
+	font-family 'Quicksand'
+	bottom 0
+	left 0
+	right 0
+	padding 20px
+
+	span
+		font-size 12px
+
+.listContainer
+	background-image url('/images/listbg.png')
+	background-size 100%
+	background-repeat no-repeat
+	width list-cont-width
+	height list-cont-height
+	padding-left 17px
+	padding-right 10px
+	padding-top 10px
+	margin auto
+
+	ul
+		width 100%
+		max-height list-ul-height
+		margin-top 10px
+		overflow-x hidden
+		overflow-y auto
+
+		li
+			font-family 'Quicksand'
+			font-size 22px
+			line-height 36px
+			width list-li-width
+			overflow-x hidden
+
+.threepartcont
+	margin auto
+	width 95%
+.aleft
+	float left
+	width 33%
+	min-width threepart-size
+.acenter
+	float left
+	width 33%
+	min-width threepart-size
+.aright
+	float left
+	width 33%
+	min-width threepart-size
+
+.threepartinner
+	margin auto
+	width 430px
+	padding-right 18px
+	overflow hidden

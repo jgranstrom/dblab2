@@ -1,0 +1,278 @@
+@import url("http://fonts.googleapis.com/css?family=Quicksand");
+@import url("http://fonts.googleapis.com/css?family=Atomic+Age");
+@import url("http://fonts.googleapis.com/css?family=Nova+Square");
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-weight: inherit;
+  font-style: inherit;
+  font-family: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+body {
+  line-height: 1;
+  color: #000;
+  background: #fff;
+}
+ol,
+ul {
+  list-style: none;
+}
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  vertical-align: middle;
+}
+caption,
+th,
+td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+a img {
+  border: none;
+}
+body {
+  background-color: #53627a;
+}
+.bgoverlay {
+  background-image: url("/images/bgoverlay.png");
+  background-repeat: no-repeat;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.topbar {
+  background-image: url("/images/topbarbg.png");
+  position: absolute;
+  height: 204px;
+  left: 0;
+  right: 0;
+}
+.topbar .title {
+  white-space: nowrap;
+  color: #fff;
+  font-family: 'Quicksand';
+  padding-left: 50px;
+  padding-top: 25px;
+}
+.topbar .title h1 {
+  font-size: 60px;
+}
+.topbar .title h2 {
+  font-size: 30px;
+  padding-left: 42px;
+  margin-top: -5px;
+}
+.topbar .content {
+  position: absolute;
+  height: 127px;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+.bottomoverlay {
+  background-image: url("/images/bottomoverlay.png");
+  position: fixed;
+  height: 186px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.inner-content {
+  position: absolute;
+  top: 204px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-height: 600px;
+}
+.infobar {
+  color: #fff;
+  font-family: 'Quicksand';
+  text-align: center;
+  font-size: 26px;
+  background-image: url("/images/infooverlay.png");
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 77px;
+  line-height: 77px;
+  white-space: nowrap;
+}
+.login {
+  background-image: url("/images/loginoverlay.png");
+  width: 458px;
+  height: 186px;
+  margin: auto;
+  margin-top: 200px;
+  padding: 50px 75px;
+}
+input {
+  outline: none;
+  border: 0px solid #000;
+  background-color: transparent;
+}
+input.smalltext {
+  background-image: url("/images/inputbgsmall.png");
+  height: 49px;
+  width: 428px;
+  padding-left: 15px;
+  padding-right: 20px;
+  padding-bottom: 5px;
+  font-size: 20px;
+  color: #3c3c3c;
+}
+input.largetext {
+  background-image: url("/images/inputbglarge.png");
+  height: 49px;
+  width: 400px;
+  padding-left: 15px;
+  padding-right: 30px;
+  padding-bottom: 5px;
+  font-size: 20px;
+  color: #3c3c3c;
+}
+input.smallbutton {
+  font-family: 'Quicksand';
+  color: #fff;
+  background-image: url("/images/buttonsmall.png");
+  width: 170px;
+  height: 55px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  font-size: 20px;
+  margin-right: -5px;
+}
+.vertmargin {
+  margin-top: 20px;
+}
+.right {
+  float: right;
+}
+.footer {
+  position: fixed;
+  color: #fff;
+  font-family: 'Quicksand';
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+}
+.footer span {
+  font-size: 12px;
+}
+.listContainer {
+  background-image: url("/images/listbg.png");
+  -webkit-background-size: 100%;
+  -moz-background-size: 100%;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  width: 420px;
+  height: 322.875px;
+  padding-left: 17px;
+  padding-right: 10px;
+  padding-top: 10px;
+  margin: auto;
+}
+.listContainer ul {
+  width: 100%;
+  max-height: 288.875px;
+  margin-top: 10px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.listContainer ul li {
+  font-family: 'Quicksand';
+  font-size: 22px;
+  line-height: 36px;
+  width: 407px;
+  overflow-x: hidden;
+}
+.threepartcont {
+  margin: auto;
+  width: 95%;
+}
+.aleft {
+  float: left;
+  width: 33%;
+  min-width: 440px;
+}
+.acenter {
+  float: left;
+  width: 33%;
+  min-width: 440px;
+}
+.aright {
+  float: left;
+  width: 33%;
+  min-width: 440px;
+}
+.threepartinner {
+  margin: auto;
+  width: 430px;
+  padding-right: 18px;
+  overflow: hidden;
+}
