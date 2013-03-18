@@ -5,4 +5,5 @@ block main-content
 	.login
 		input(type='text', class='smalltext', placeholder='kiosk id', autofocus)
 		input(type='password', class='smalltext vertmargin', placeholder='password')
-		input(type='submit', class='smallbutton vertmargin right', value='login')
+		form(method='link', action='/')
+			input(type='submit', class='smallbutton vertmargin right', value='login')

@@ -1,4 +1,11 @@
 extends layout
+block topbar-content
+	.right
+		.logout
+			form(method='link', action='/login')
+				input(type='submit', value='logout')
+	.info
+		span Kiosk #34 324 Kunggatan Stockholm		
 block main-content
 	.threepartcont
 		.aleft
@@ -28,7 +35,12 @@ block main-content
 					h2 book transfer
 					input(type='text', class='largetext', placeholder='sender passport id')
 					input(type='text', class='largetext vertmargin', placeholder='recipient passport id')
-					input(type='text', class='largetext vertmargin', placeholder='recipient kiosk')
+					//input(type='text', class='largetext vertmargin', placeholder='recipient kiosk')
+					div(class='selwrap', class='vertmargin')
+						select
+							option(class='dis', selected, disabled="disabled") recipient kiosk
+							option kiosk 1
+							option kiosk 2
 					input(type='submit', class='smallbutton vertmargin right', value='book')
 		.aright
 			.inner			
