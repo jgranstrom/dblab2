@@ -1,11 +1,29 @@
 var mysql = require('mysql');
 
-var connection = mysql.createConnection({
-	host	: 'zpruce.no-ip.org',
-	user	: 'dev',
-	password: 'klaffe',
-	database: 'dblab2'
-});
+var connection = createConnection();
+
+function createConnection(){
+	return mysql.createConnection({
+		host	: 'zpruce.no-ip.org',
+		user	: 'dev',
+		password: 'klaffe',
+		database: 'dblab2'
+	});
+}
+
+// Handle some unexpected stuff
+function handleDisconnection(connection){
+	connection.on('error', function(err) {
+		if(code === 'PROTOCOL_ENQUEUE_AFTER_DESTROY') {
+			console.log('Reconnecting database')
+
+			connection = createConnection();
+			handleDisconnection(connection);
+			connect();
+		}
+	});
+}
+handleDisconnection(connection);
 
 var connect = function() {
 	connection.connect(function(err){
