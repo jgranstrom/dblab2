@@ -183,6 +183,13 @@ body {
 .login input.smallbutton {
   margin-right: 4px !important;
 }
+.login span {
+  line-height: 30px;
+  margin-left: 15px;
+  font-family: 'Quicksand';
+  font-size: 16px;
+  color: #fff;
+}
 input {
   outline: none;
   border: 0px solid #000;
@@ -368,9 +375,19 @@ h2 {
 }
 .info {
   margin-right: 20px;
-  margin-top: 10px;
+  margin-top: 15px;
   float: right;
   color: #fff;
   font-family: 'Quicksand';
   font-size: 18px;
+}
+.currency {
+  margin-left: 5px;
+}
+#powerTip {
+  line-height: 25px;
+}
+.highlight {
+  color: #303080;
+  font-weight: bold;
 }

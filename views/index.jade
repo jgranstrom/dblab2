@@ -2,34 +2,26 @@ extends layout
 block topbar-content
 	.right
 		.logout
-			form(method='link', action='/login')
+			form(method='post', action='/logout')
 				input(type='submit', value='logout')
 	.info
-		span Kiosk #34 324 Kunggatan Stockholm		
+		span #{kioskInfo}		
 block main-content
+	append block scripts
+		script(type="text/javascript", src='/javascripts/index.js')
+		script(type="text/javascript", src="/javascripts/jquery.powertip.js")
 	.threepartcont
 		.aleft
 			.inner
 				h2 accounts
 				.listContainer
-					ul
-						li
-							span Operating account
-							span(class='right') 10000 kr
-						li
-							span Revenue account
-							span(class='right') 55000 kr
-		.acenter			
+					ul(id='accountList')
+						
+		.acenter		
 			.inner
 				h2 outgoing transfers
 				.listContainer
-					ul
-						li
-							span Operating account
-							span(class='right') 10000 kr
-						li
-							span Revenue account
-							span(class='right') 55000 kr
+					ul(id='transferList')
 
 				.sec(class='large')
 					h2 book transfer
@@ -37,22 +29,15 @@ block main-content
 					input(type='text', class='largetext vertmargin', placeholder='recipient passport id')
 					//input(type='text', class='largetext vertmargin', placeholder='recipient kiosk')
 					div(class='selwrap', class='vertmargin')
-						select
+						select(id='kioskSelect')
 							option(class='dis', selected, disabled="disabled") recipient kiosk
-							option kiosk 1
-							option kiosk 2
+
 					input(type='submit', class='smallbutton vertmargin right', value='book')
 		.aright
 			.inner			
 				h2 pending payouts	
 				.listContainer
-					ul
-						li
-							span Operating account
-							span(class='right') 10000 kr
-						li
-							span Revenue account
-							span(class='right') 55000 kr
+					ul(id='payoutList')
 
 				.sec(class='small')
 					h2 record payout
