@@ -41,6 +41,6 @@ block main-content
 
 				.sec(class='small')
 					h2 record payout
-					input(type='text', class='largetext', placeholder='recipient passport id')				
+					input(type='text', id='payoutClientId', class='largetext', placeholder='recipient passport id')				
 					input(type='submit', class='smallbutton vertmargin right', value='payout')
-					input(type='submit', class='smallbutton vertmargin right horiz', value='check owing')				
+					input(type='submit', class='smallbutton vertmargin right horiz', value='check owing', onclick='showOwing();')				

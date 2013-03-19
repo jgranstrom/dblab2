@@ -72,6 +72,15 @@ function loadPayouts(){
 	});
 }
 
+function showOwing() {
+	var clientId = $('#payoutClientId');
+
+	$.post('/owing', { clientId: clientId.val() }, function(data){
+		var d = JSON.parse(data)[0];
+		alert((d.amount == null ? 0 : d.amount) + ' ' + d.currency);
+	});
+}
+
 $(document).ready(function(){
 	loadAccounts();
 	loadKiosks();

@@ -15,7 +15,8 @@ var express = require('express')
   , LocalStrategy = require('passport-local').Strategy
   , users = require('./user')
   , sql = require('./sql')
-  , datagets = require('./routes/datagets');
+  , datagets = require('./routes/datagets')
+  , dataposts = require('./routes/dataposts');
 
 var app = express();
 sql.connect();
@@ -72,6 +73,8 @@ app.get('/accounts', ensureAuthenticated, datagets.accounts(sql));
 app.get('/transfers', ensureAuthenticated, datagets.transfers(sql));
 app.get('/payouts', ensureAuthenticated, datagets.payouts(sql));
 app.get('/cb', datagets.cb(sql));
+
+app.post('/owing', dataposts.owing(sql));
 
 app.get('/', ensureAuthenticated, routes.index(sql));
 app.get('/login', login.index);

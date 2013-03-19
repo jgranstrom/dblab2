@@ -3,7 +3,7 @@ exports.kiosks = function(sql) {
 		sql.getOtherKiosks(req.user.usr, function(kioskRows){
 				res.end( JSON.stringify(kioskRows) );
 		});
-	}; 		
+	}; 	
 };
 
 exports.accounts = function(sql) {

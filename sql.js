@@ -169,6 +169,28 @@ var getCBAccounts = function(callback){
 	});
 }
 
+var getOwing = function(kioskId, clientId, callback){
+	connection.query(	'SELECT SUM(recipientGrantedAmount) AS amount, \
+						recipientk.nativeCurrency AS currency \
+						FROM Transfer \
+						INNER JOIN Kiosk recipientk ON recipientKioskId = recipientk.kioskId \
+						INNER JOIN Client recipient ON recipientClientId = recipient.clientId \
+						WHERE recipientk.kioskId = ? \
+						AND recipient.clientId = ? \
+						AND statusCode = 0',  // Only uncollected payouts
+		[kioskId, clientId], function(err, rows){
+		if(err)
+		{
+			console.log(err);
+			callback(null);
+		}
+		else
+		{
+			callback(rows);
+		}
+	});
+};
+
 exports.connect = connect;
 exports.getUser = getUser;
 exports.getKioskAccounts = getKioskAccounts;
@@ -176,3 +198,4 @@ exports.getOtherKiosks = getOtherKiosks;
 exports.getTransfers = getTransfers;
 exports.getPayouts = getPayouts;
 exports.getCBAccounts = getCBAccounts;
+exports.getOwing = getOwing;
