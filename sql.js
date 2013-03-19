@@ -2,7 +2,7 @@ var mysql = require('mysql');
 
 var connection = createConnection();
 
-function createConnection(){
+function createConnection() {
 	return mysql.createConnection({
 		host	: 'zpruce.no-ip.org',
 		user	: 'dev',
@@ -12,43 +12,45 @@ function createConnection(){
 }
 
 // Handle some unexpected stuff
-function handleDisconnection(connection){
-	connection.on('error', function(err) {
-		if(code === 'PROTOCOL_ENQUEUE_AFTER_DESTROY') {
-			console.log('Reconnecting database')
-
-			connection = createConnection();
-			handleDisconnection(connection);
-			connect();
-		}
-	});
+function ensureConnection(callback) {
+	console.log(connection);
+	if(connection._socket.destroyed) {
+		console.log('Database connection destroyed, restoring');
+		connection = createConnection();
+		connect(callback);
+	}
+	else
+		callback();
 }
-handleDisconnection(connection);
 
-var connect = function() {
+var connect = function(callback) {
 	connection.connect(function(err){
 		if(err)
 			console.warn('Error connecting to database');
 		else
 			console.log('Database connection established');
+		if(callback)
+			callback();
 	});
 };
 
 var getUser = function(username, callback){
-	connection.query('SELECT password, name, entityId, adress, country FROM Kiosk NATURAL JOIN Adress WHERE kioskId = ?', 
-		[username], function(err, rows){
-		if(err)
-		{
-			console.log(err);
-			callback(null);
-		}
-		else if (rows.length > 0)
-		{
-			callback(rows[0]);
-		}
-		else
-			callback(null);
-	});
+	ensureConnection(function() {
+		connection.query('SELECT password, name, entityId, adress, country FROM Kiosk NATURAL JOIN Adress WHERE kioskId = ?', 
+			[username], function(err, rows){
+			if(err)
+			{
+				console.log(err);
+				callback(null);
+			}
+			else if (rows.length > 0)
+			{
+				callback(rows[0]);
+			}
+			else
+				callback(null);
+		});
+	});	
 };
 
 var getKioskAccounts = function(kioskId, callback){
