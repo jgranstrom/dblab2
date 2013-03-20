@@ -8,4 +8,7 @@ function initSocket(){
 	socket.on('payouts', function(){
 		loadPayouts();
 	});
+	socket.on('transfers', function(){
+		loadTransfers();
+	});
 }

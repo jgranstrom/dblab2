@@ -16,19 +16,36 @@ exports.owing = function(sql) {
 };
 
 exports.payout = function(sql, sockets) {
-	// TODO: Add actual payout logic to change values here
 	return function(req, res) {
-		sql.payoutProc(req.user.usr, req.body.clientId, function(row){
-			res.end( JSON.stringify(row) );
+		sql.payoutProc(req.user.usr, req.body.clientId, function(row, involvedKiosks){
+			res.end( JSON.stringify(row) );			
 			sockets.emitToUser(req.user.usr, 'accounts');
 			sockets.emitToUser(req.user.usr, 'payouts');
+
+			console.log(involvedKiosks);
+			involvedKiosks.forEach(function(kiosk) {
+				console.log(kiosk.senderKioskId);
+				sockets.emitToUser(kiosk.senderKioskId, 'transfers');
+			});
 		});
 	};
 };
 
 exports.book = function(sql, sockets) {
-	// TODO: Add booking logic and return result in json here
 	return function(req, res) {
-		res.end( JSON.stringify([]));
+		sql.bookProc(req.user.usr, req.body.senderId, req.body.recipientKioskId, req.body.recipientId, req.body.amount, function(rows){
+			if(rows == null) {
+				res.end( JSON.stringify({ error: 'error' }));
+			}
+			else {
+				res.end( JSON.stringify({ error: 'noerror' }));			
+
+				sockets.emitToUser(req.user.usr, 'accounts');
+				sockets.emitToUser(req.user.usr, 'transfers');
+
+				sockets.emitToUser(req.body.recipientKioskId, 'accounts');
+				sockets.emitToUser(req.body.recipientKioskId, 'payouts');
+			}			
+		});
 	};
 };

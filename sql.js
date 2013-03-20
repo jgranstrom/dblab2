@@ -37,7 +37,7 @@ var connect = function(callback) {
 var getUser = function(username, callback){
 	ensureConnection(function() {
 		console.log(username);
-		connection.query('SELECT password, name, entityId, adress, country FROM Kiosk NATURAL JOIN Adress WHERE kioskId = ? AND ? RLIKE \'^[0-9]+$\'', 
+		connection.query('SELECT password, name, entityId, adress, country, nativeCurrency FROM Kiosk NATURAL JOIN Adress WHERE kioskId = ? AND ? RLIKE \'^[0-9]+$\'', 
 			[username, username], function(err, rows){
 			if(err)
 			{
@@ -49,7 +49,7 @@ var getUser = function(username, callback){
 				callback(rows[0]);
 			}
 			else
-				callback(null);
+				callback(null);2	
 		});
 	});	
 };
@@ -194,9 +194,17 @@ var getOwing = function(kioskId, clientId, callback){
 };
 
 var payoutProc = function(kioskId, clientId, callback){
-	connection.query(	'CALL payout(?, ?, @a, @c); \
+	connection.query(	'SET autocommit=0; \
+					START TRANSACTION; \
+					SELECT senderKioskId \
+						FROM Transfer \
+						WHERE 	recipientClientId = ? \
+								AND recipientKioskId = ? \
+								AND statusCode = 0;	\
+					CALL payout(?, ?, @a, @c); \
 					select @a AS amount, @c AS currency',
-		[kioskId, clientId], function(err, rows){
+		[clientId, kioskId, kioskId, clientId], function(err, rows){
+			console.log(rows);
 		if(err)
 		{
 			console.log(err);
@@ -204,7 +212,7 @@ var payoutProc = function(kioskId, clientId, callback){
 		}
 		else
 		{
-			callback(rows[1]);
+			callback(rows[4], rows[2]);
 		}
 	});
 
@@ -214,6 +222,22 @@ var payoutProc = function(kioskId, clientId, callback){
 					[kioskId, clientId], function(rows){
 						callback(rows[1]);
 					});*/
+}
+
+var bookProc = function(senderKioskId, senderClientId, recipientKioskId, recipientClientId, amountToSend, callback){
+	connection.query(	'CALL book(?, ?, ?, ?, ?, @r); \
+					select @r AS bookingDone',
+		[senderKioskId, senderClientId, recipientKioskId, recipientClientId, amountToSend], function(err, rows){
+		if(err)
+		{
+			console.log(err);
+			callback(null);
+		}
+		else
+		{
+			callback(rows);
+		}
+	});
 }
 
 // Helper for refactoring..
@@ -238,3 +262,4 @@ exports.getPayouts = getPayouts;
 exports.getCBAccounts = getCBAccounts;
 exports.getOwing = getOwing;
 exports.payoutProc = payoutProc;
+exports.bookProc = bookProc;
