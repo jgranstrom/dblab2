@@ -4,6 +4,7 @@ function User(usr, row){
 	this.kioskName = row.name;
 	this.entityId = row.entityId;
 	this.location = row.adress + " " + row.country;
+	this.currency = row.nativeCurrency
 }
 
 User.prototype.verifyPassword = function(pwd) {

@@ -32,12 +32,15 @@ block main-content
 					input(id='recipientClientId', type='text', class='largetext vertmargin', placeholder='recipient passport id')
 					div(class='selwrap', class='vertmargin')
 						select(id='kioskSelect')
-							option(class='dis', selected, disabled="disabled") recipient kiosk
+							option(class='dis', value=0, selected, disabled="disabled") recipient kiosk
+
+					input(id='sentAmount', type='text', class='smallesttext vertmargin left', placeholder='amount')
 
 					input(type='submit', class='smallbutton vertmargin right', value='book', onclick='book();')
+					span(id='currencyOverlay') #{currency}
 		.aright
 			.inner			
-				h2 pending payouts	
+				h2 incoming payouts	
 				.listContainer
 					ul(id='payoutList')
 

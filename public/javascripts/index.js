@@ -1,12 +1,17 @@
 function loadAccounts(){
 	var accountList = $('#accountList');
-	accountList.html('');
 	$.get('/accounts', function(accounts) {
 		JSON.parse(accounts).forEach(function(account){
-			accountList.append($('<li></li>')
-	        	.html('<span>' + account.type + '</span>'
-	        		+ '<span class=\'right currency\'>' + account.currency + '</span>'
-	        		+ '<span class=\'right\'>' + account.amount + '</span>')); 
+			var existingItem = $('#acc' + account.type.replace(' ', '_'));
+			if(existingItem.length < 1) {
+				accountList.append($('<li id=acc' + account.type.replace(' ', '_') + '></li>')
+		        	.html('<span>' + account.type + '</span>'
+		        		+ '<span class=\'right currency\'>' + account.currency + '</span>'
+		        		+ '<span id=value class=\'right\'>' + account.amount + '</span>')); 
+			}
+			else {
+				existingItem.find('#value').html(account.amount);
+			}
 		});
 	});
 }
@@ -26,6 +31,7 @@ function loadTransfers(){
 	var transferList = $('#transferList');
 	transferList.html('');
 	$.get('/transfers', function(transfers) {
+		transferList.hide();
 		JSON.parse(transfers).forEach(function(transfer){
 			var popupText = "<b>From client:</b> " + transfer.senderClientName + " (#" + transfer.senderClientId
 							+ ")<br/><b>To client:</b> " + transfer.recipientClientName + " (#" + transfer.recipientClientId
@@ -47,13 +53,15 @@ function loadTransfers(){
 	        		+ '<span class=\'right\'>' + transfer.sentAmount + '</span>')
 	        	.powerTip({ mouseOnToPopup: true, placement: 'w' }));
 		});
-	});
+		transferList.fadeIn('fast');
+	});		
 }
 
 function loadPayouts(){
 	var payoutList = $('#payoutList');
 	payoutList.html('');
 	$.get('/payouts', function(payouts) {
+		payoutList.hide();
 		JSON.parse(payouts).forEach(function(payout){
 			var popupText = "<b>From kiosk:</b> " + payout.senderKioskName + " (#" + payout.senderKioskId
 							+ ")<br/><b>From client:</b> " + payout.senderClientName + " (#" + payout.senderClientId
@@ -74,6 +82,7 @@ function loadPayouts(){
 	        		+ '<span class=\'right\'>' + payout.recipientGrantedAmount + '</span>')
 	        	.powerTip({ mouseOnToPopup: true, placement: 'w' }));
 		});
+		payoutList.fadeIn('fast');
 	});
 }
 
@@ -146,9 +155,28 @@ function book() {
 		return;
 	}
 
-	$.post('/book', { senderId: senderId, recipientId: recipientId, recipientKioskId: recipientKioskId }, function(data) {
-		// TODO: Check result and display any errors
+	var sentAmount = $('#sentAmount').val()
+	if(sentAmount.length < 1)
+	{
+		showWarningDialog('Provide amount to transfer', 'Input');
+		return;
+	}
+
+	$.post('/book', { senderId: senderId, recipientId: recipientId, recipientKioskId: recipientKioskId, amount: sentAmount }, function(data) {
+		if(JSON.parse(data).error === 'error') {
+			showWarningDialog('Failed to book transfer, check your input', 'Booking failed');
+		}
+		else {
+			clearBookingInput();
+		}		
 	});
+}
+
+function clearBookingInput() {
+	$('#senderClientId').val('');
+	$('#recipientClientId').val('');
+	$('#kioskSelect').val(0);
+	$('#sentAmount').val('');
 }
 
 function showInformationDialog(text, title) { 
