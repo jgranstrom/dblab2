@@ -16,7 +16,8 @@ var express = require('express')
   , users = require('./user')
   , sql = require('./sql')
   , datagets = require('./routes/datagets')
-  , dataposts = require('./routes/dataposts');
+  , dataposts = require('./routes/dataposts')
+  , sockets = require('./sockets');
 
 var app = express();
 sql.connect();
@@ -43,6 +44,9 @@ passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
 
+var cookieParser = express.cookieParser('aBcSeCreT#!123Aky7');
+var store = new express.session.MemoryStore()
+
 app.configure(function(){
   app.set('port', process.env.PORT || 80);
   app.set('views', __dirname + '/views');
@@ -51,8 +55,8 @@ app.configure(function(){
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(express.cookieParser('aBcSeCreT#!123Aky7'));
-  app.use(express.session());
+  app.use(cookieParser);
+  app.use(express.session({secret: 'aBcSeCreT#!123Aky7', store: store, key: 'sid' }));
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(flash());
@@ -75,8 +79,8 @@ app.get('/payouts', ensureAuthenticated, datagets.payouts(sql));
 
 // Dataposts
 app.post('/owing', ensureAuthenticated, dataposts.owing(sql));
-app.post('/payout', ensureAuthenticated, dataposts.payout(sql));
-app.post('/book', ensureAuthenticated, dataposts.book(sql));
+app.post('/payout', ensureAuthenticated, dataposts.payout(sql, sockets));
+app.post('/book', ensureAuthenticated, dataposts.book(sql, sockets));
 
 app.get('/', ensureAuthenticated, routes.index(sql));
 app.get('/login', login.index);
@@ -97,6 +101,8 @@ function ensureAuthenticated(req, res, next) {
   res.redirect('/login')
 }
 
-http.createServer(app).listen(app.get('port'), function(){
+var server = http.createServer(app);
+sockets.init(server, cookieParser, store);
+server.listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });

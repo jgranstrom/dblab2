@@ -1,5 +1,6 @@
 function loadAccounts(){
 	var accountList = $('#accountList');
+	accountList.html('');
 	$.get('/accounts', function(accounts) {
 		JSON.parse(accounts).forEach(function(account){
 			accountList.append($('<li></li>')
@@ -23,11 +24,14 @@ function loadKiosks(){
 
 function loadTransfers(){
 	var transferList = $('#transferList');
+	transferList.html('');
 	$.get('/transfers', function(transfers) {
 		JSON.parse(transfers).forEach(function(transfer){
 			var popupText = "<b>From client:</b> " + transfer.senderClientName + " (#" + transfer.senderClientId
 							+ ")<br/><b>To client:</b> " + transfer.recipientClientName + " (#" + transfer.recipientClientId
-							+ ")<br/><b>Sent:</b> " + new Date(transfer.sentTime).toString();
+							+ ")<br/><b>Recipient granted to:</b> " + transfer.recipientGrantedAmount + ' ' + transfer.recipientCurrency;
+							+ "<br/><b>Sent:</b> " + new Date(transfer.sentTime).toString();
+							
 			var adstyle = "";
 			if(transfer.statusCode === 1) {
 				popupText += "<br/><b>Collected:</b>  " + new Date(transfer.collectedTime).toString();
@@ -48,6 +52,7 @@ function loadTransfers(){
 
 function loadPayouts(){
 	var payoutList = $('#payoutList');
+	payoutList.html('');
 	$.get('/payouts', function(payouts) {
 		JSON.parse(payouts).forEach(function(payout){
 			var popupText = "<b>From kiosk:</b> " + payout.senderKioskName + " (#" + payout.senderKioskId
@@ -79,6 +84,7 @@ function showOwing() {
 		return;
 	}
 
+	$('#payoutClientId').val('');
 	$.post('/owing', { clientId: cId }, function(data){
 		var d = JSON.parse(data)[0];
 		showInformationDialog('This kiosk owe client #' + cId + ' ' + (d.amount == null ? 'nothing' : d.amount  + ' ' + d.currency), 'Owing');
@@ -95,10 +101,12 @@ function payout() {
 	$.post('/owing', { clientId: cId }, function(data){
 		var d = JSON.parse(data)[0];
 		if(d.amount == null) {
+			$('#payoutClientId').val('');
 			showWarningDialog('You have no owings for client #' + cId);
 		} else {
 			dialog = showQuestionDialog('Do you want to payout ' + d.amount  + ' ' + d.currency + ' to client#' + cId + '?', 'Payout?', function(proceed){
 				if(proceed) {
+					$('#payoutClientId').val('');
 					setTimeout(function(){
 						$.post('/payout', { clientId: cId }, function(data){
 							pdata = JSON.parse(data)[0];
@@ -107,7 +115,7 @@ function payout() {
 							}
 							else {
 								showWarningDialog('You have no owings for client #' + cId);
-							}
+							}							
 							
 						});
 					}, 500);
@@ -190,4 +198,6 @@ $(document).ready(function(){
 	loadKiosks();
 	loadTransfers();
 	loadPayouts();
+
+	initSocket();
 })

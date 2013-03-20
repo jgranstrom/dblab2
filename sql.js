@@ -36,8 +36,9 @@ var connect = function(callback) {
 
 var getUser = function(username, callback){
 	ensureConnection(function() {
-		connection.query('SELECT password, name, entityId, adress, country FROM Kiosk NATURAL JOIN Adress WHERE kioskId = ?', 
-			[username], function(err, rows){
+		console.log(username);
+		connection.query('SELECT password, name, entityId, adress, country FROM Kiosk NATURAL JOIN Adress WHERE kioskId = ? AND ? RLIKE \'^[0-9]+$\'', 
+			[username, username], function(err, rows){
 			if(err)
 			{
 				console.log(err);
@@ -95,7 +96,8 @@ var getTransfers = function(kioskId, callback){
 						senderClientId, \
 						sender.fullName AS senderClientName,\
 						recipientKioskId, \
-						recipientk.name AS recipientKioskName \
+						recipientk.name AS recipientKioskName, \
+						recipientk.nativeCurrency AS recipientCurrency \
 						FROM Transfer \
 						INNER JOIN Kiosk senderk ON senderKioskId = kioskId \
 						INNER JOIN Kiosk recipientk ON recipientKioskId = recipientk.kioskId \
@@ -137,7 +139,6 @@ var getPayouts = function(kioskId, callback){
 						WHERE recipientk.kioskId = ? \
 						ORDER BY statusCode ASC, sentTime DESC', 
 		[kioskId], function(err, rows){
-			console.log(rows);
 		if(err)
 		{
 			console.log(err);
@@ -194,7 +195,7 @@ var getOwing = function(kioskId, clientId, callback){
 
 var payoutProc = function(kioskId, clientId, callback){
 	connection.query(	'CALL payout(?, ?, @a, @c); \
-						select @a AS amount, @c AS currency',
+					select @a AS amount, @c AS currency',
 		[kioskId, clientId], function(err, rows){
 		if(err)
 		{
@@ -206,7 +207,27 @@ var payoutProc = function(kioskId, clientId, callback){
 			callback(rows[1]);
 		}
 	});
+
+	// May refactor into..
+	/*internalQuery('CALL payout(?, ?, @a, @c); \
+					select @a AS amount, @c AS currency',
+					[kioskId, clientId], function(rows){
+						callback(rows[1]);
+					});*/
 }
+
+// Helper for refactoring..
+/*function internalQuery(query, params, callback) {
+	connection.query( query, params, function(err, rows) {
+		if(err) {
+			console.log(err);
+			callback(null);
+		}
+		else {
+			callback(rows);
+		}
+	});
+}*/
 
 exports.connect = connect;
 exports.getUser = getUser;
