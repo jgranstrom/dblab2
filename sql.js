@@ -7,13 +7,13 @@ function createConnection() {
 		host	: 'zpruce.no-ip.org',
 		user	: 'dev',
 		password: 'klaffe',
-		database: 'dblab2'
+		database: 'dblab2',
+		multipleStatements: true /* Security risk.. */
 	});
 }
 
 // Handle some unexpected stuff
 function ensureConnection(callback) {
-	console.log(connection);
 	if(connection._socket.destroyed) {
 		console.log('Database connection destroyed, restoring');
 		connection = createConnection();
@@ -137,6 +137,7 @@ var getPayouts = function(kioskId, callback){
 						WHERE recipientk.kioskId = ? \
 						ORDER BY statusCode ASC, sentTime DESC', 
 		[kioskId], function(err, rows){
+			console.log(rows);
 		if(err)
 		{
 			console.log(err);
@@ -191,6 +192,22 @@ var getOwing = function(kioskId, clientId, callback){
 	});
 };
 
+var payoutProc = function(kioskId, clientId, callback){
+	connection.query(	'CALL payout(?, ?, @a, @c); \
+						select @a AS amount, @c AS currency',
+		[kioskId, clientId], function(err, rows){
+		if(err)
+		{
+			console.log(err);
+			callback(null);
+		}
+		else
+		{
+			callback(rows[1]);
+		}
+	});
+}
+
 exports.connect = connect;
 exports.getUser = getUser;
 exports.getKioskAccounts = getKioskAccounts;
@@ -199,3 +216,4 @@ exports.getTransfers = getTransfers;
 exports.getPayouts = getPayouts;
 exports.getCBAccounts = getCBAccounts;
 exports.getOwing = getOwing;
+exports.payoutProc = payoutProc;

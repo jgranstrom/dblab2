@@ -9,7 +9,8 @@ block topbar-content
 block main-content
 	append block scripts
 		script(type="text/javascript", src='/javascripts/index.js')
-		script(type="text/javascript", src="/javascripts/jquery.powertip.js")
+		script(type="text/javascript", src="/javascripts/jquery.powertip.js")	
+		script(type="text/javascript", src="/javascripts/zebra_dialog.js")	
 	.threepartcont
 		.aleft
 			.inner
@@ -25,14 +26,13 @@ block main-content
 
 				.sec(class='large')
 					h2 book transfer
-					input(type='text', class='largetext', placeholder='sender passport id')
-					input(type='text', class='largetext vertmargin', placeholder='recipient passport id')
-					//input(type='text', class='largetext vertmargin', placeholder='recipient kiosk')
+					input(id='senderClientId', type='text', class='largetext', placeholder='sender passport id')
+					input(id='recipientClientId', type='text', class='largetext vertmargin', placeholder='recipient passport id')
 					div(class='selwrap', class='vertmargin')
 						select(id='kioskSelect')
 							option(class='dis', selected, disabled="disabled") recipient kiosk
 
-					input(type='submit', class='smallbutton vertmargin right', value='book')
+					input(type='submit', class='smallbutton vertmargin right', value='book', onclick='book();')
 		.aright
 			.inner			
 				h2 pending payouts	
@@ -42,5 +42,5 @@ block main-content
 				.sec(class='small')
 					h2 record payout
 					input(type='text', id='payoutClientId', class='largetext', placeholder='recipient passport id')				
-					input(type='submit', class='smallbutton vertmargin right', value='payout')
+					input(type='submit', class='smallbutton vertmargin right', value='payout', onclick='payout();')
 					input(type='submit', class='smallbutton vertmargin right horiz', value='check owing', onclick='showOwing();')				

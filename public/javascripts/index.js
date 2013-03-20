@@ -73,11 +73,115 @@ function loadPayouts(){
 }
 
 function showOwing() {
-	var clientId = $('#payoutClientId');
+	var cId = $('#payoutClientId').val();
+	if(cId.length < 1) {
+		showWarningDialog('Provide recipient passport id', 'Input');
+		return;
+	}
 
-	$.post('/owing', { clientId: clientId.val() }, function(data){
+	$.post('/owing', { clientId: cId }, function(data){
 		var d = JSON.parse(data)[0];
-		alert((d.amount == null ? 0 : d.amount) + ' ' + d.currency);
+		showInformationDialog('This kiosk owe client #' + cId + ' ' + (d.amount == null ? 'nothing' : d.amount  + ' ' + d.currency), 'Owing');
+	});
+}
+
+function payout() {
+	var cId = $('#payoutClientId').val();
+	if(cId.length < 1) {
+		showWarningDialog('Provide recipient passport id', 'Input');
+		return;
+	}
+
+	$.post('/owing', { clientId: cId }, function(data){
+		var d = JSON.parse(data)[0];
+		if(d.amount == null) {
+			showWarningDialog('You have no owings for client #' + cId);
+		} else {
+			dialog = showQuestionDialog('Do you want to payout ' + d.amount  + ' ' + d.currency + ' to client#' + cId + '?', 'Payout?', function(proceed){
+				if(proceed) {
+					setTimeout(function(){
+						$.post('/payout', { clientId: cId }, function(data){
+							pdata = JSON.parse(data)[0];
+							if(pdata.amount != null) {
+								showConfirmationDialog('Payout ' + pdata.amount + ' ' + pdata.currency + ' to client #' + cId);	
+							}
+							else {
+								showWarningDialog('You have no owings for client #' + cId);
+							}
+							
+						});
+					}, 500);
+					
+				}
+			});
+		}		
+	});	
+}
+
+function book() {
+	var senderId = $('#senderClientId').val();
+	if(senderId.length < 1) {
+		showWarningDialog('Provide sender passport id', 'Input');
+		return;
+	}
+
+	var recipientId = $('#recipientClientId').val();
+	if(recipientId.length < 1) {
+		showWarningDialog('Provide recipient passport id', 'Input');
+		return;
+	}
+
+	var recipientKioskId = $('#kioskSelect').val()
+	if(recipientKioskId == null)
+	{
+		showWarningDialog('Provide recipient kiosk', 'Input');
+		return;
+	}
+
+	$.post('/book', { senderId: senderId, recipientId: recipientId, recipientKioskId: recipientKioskId }, function(data) {
+		// TODO: Check result and display any errors
+	});
+}
+
+function showInformationDialog(text, title) { 
+	$.Zebra_Dialog(text, {
+    'type':     'information',
+    'title':    title,
+    'buttons':  [
+                    { caption: 'Ok' }
+                ]
+	});
+}
+
+function showWarningDialog(text, title) { 
+	$.Zebra_Dialog(text, {
+    'type':     'warning',
+    'title':    title,
+    'buttons':  [
+                    { caption: 'Ok' }
+                ]
+	});
+}
+
+function showConfirmationDialog(text, title) { 
+	$.Zebra_Dialog(text, {
+    'type':     'confirmation',
+    'title':    title,
+    'buttons':  [
+                    { caption: 'Ok' }
+                ]
+	});
+}
+
+function showQuestionDialog(text, title, callback) { 
+	return $.Zebra_Dialog(text, {
+    'type':     'question',
+    'title':    title,
+    'buttons':  [
+                    {caption: 'Yes', callback: function() { callback(true); }},
+                    {caption: 'No', callback: function() { callback(false); }},
+                    {caption: 'Cancel', callback: function() { callback(false); }}
+                ]
 	});
 }
 

@@ -72,12 +72,15 @@ app.get('/kiosks', ensureAuthenticated, datagets.kiosks(sql));
 app.get('/accounts', ensureAuthenticated, datagets.accounts(sql));
 app.get('/transfers', ensureAuthenticated, datagets.transfers(sql));
 app.get('/payouts', ensureAuthenticated, datagets.payouts(sql));
-app.get('/cb', datagets.cb(sql));
 
-app.post('/owing', dataposts.owing(sql));
+// Dataposts
+app.post('/owing', ensureAuthenticated, dataposts.owing(sql));
+app.post('/payout', ensureAuthenticated, dataposts.payout(sql));
+app.post('/book', ensureAuthenticated, dataposts.book(sql));
 
 app.get('/', ensureAuthenticated, routes.index(sql));
 app.get('/login', login.index);
+app.get('/cb', datagets.cb(sql));
 app.post('/login',
   passport.authenticate('local', { successRedirect: '/',
                                    failureRedirect: '/login',
