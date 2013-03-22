@@ -85,26 +85,7 @@ var getOtherKiosks = function(kioskId, callback){
 };
 
 var getTransfers = function(kioskId, callback){
-	connection.query(	'SELECT sentTime, \
-						collectedTime, \
-						recipientGrantedAmount, \
-						sentAmount, \
-						senderk.nativeCurrency, \
-						statusCode, \
-						recipient.passport AS recipientClientId, \
-						recipient.fullName AS recipientClientName, \
-						sender.passport AS senderClientId, \
-						sender.fullName AS senderClientName,\
-						recipientKioskId, \
-						recipientk.name AS recipientKioskName, \
-						recipientk.nativeCurrency AS recipientCurrency \
-						FROM Transfer \
-						INNER JOIN Kiosk senderk ON senderKioskId = kioskId \
-						INNER JOIN Kiosk recipientk ON recipientKioskId = recipientk.kioskId \
-						INNER JOIN Client sender ON senderClientId = sender.clientId \
-						INNER JOIN Client recipient ON recipientClientId = recipient.clientId \
-						WHERE senderk.kioskId = ? \
-						ORDER BY statusCode ASC, sentTime DESC', 
+	connection.query(	'SELECT * FROM TransferView WHERE senderKioskId = ?', 
 		[kioskId], function(err, rows){
 		if(err)
 		{
@@ -119,25 +100,7 @@ var getTransfers = function(kioskId, callback){
 };
 
 var getPayouts = function(kioskId, callback){
-	connection.query(	'SELECT sentTime, \
-						collectedTime, \
-						recipientGrantedAmount, \
-						sentAmount, \
-						recipientk.nativeCurrency AS payoutCurrency, \
-						statusCode, \
-						recipient.passport AS recipientClientId, \
-						recipient.fullName AS recipientClientName, \
-						sender.passport AS senderClientId, \
-						sender.fullName AS senderClientName,\
-						senderKioskId, \
-						senderk.name AS senderKioskName \
-						FROM Transfer \
-						INNER JOIN Kiosk senderk ON senderKioskId = kioskId \
-						INNER JOIN Kiosk recipientk ON recipientKioskId = recipientk.kioskId \
-						INNER JOIN Client sender ON senderClientId = sender.clientId \
-						INNER JOIN Client recipient ON recipientClientId = recipient.clientId \
-						WHERE recipientk.kioskId = ? \
-						ORDER BY statusCode ASC, sentTime DESC', 
+	connection.query(	'SELECT * FROM PayoutView WHERE recipientKioskId = ?', 
 		[kioskId], function(err, rows){
 		if(err)
 		{

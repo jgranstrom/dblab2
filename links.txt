@@ -1,0 +1,5 @@
+http://zpruce.no-ip.org:8080/phpMyAdmin/
+
+http://zpruce.no-ip.org/cb
+
+http://zpruce.no-ip.org/reset
