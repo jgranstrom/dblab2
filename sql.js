@@ -37,7 +37,7 @@ var connect = function(callback) {
 var getUser = function(username, callback){
 	ensureConnection(function() {
 		console.log(username);
-		connection.query('SELECT password, name, entityId, adress, country, nativeCurrency FROM Kiosk NATURAL JOIN Adress WHERE kioskId = ? AND ? RLIKE \'^[0-9]+$\'', 
+		connection.query('SELECT password, name, entityId, adress, country, nativeCurrency FROM Kiosk NATURAL JOIN Adress WHERE kioskId = ?', 
 			[username, username], function(err, rows){
 			if(err)
 			{
@@ -91,9 +91,9 @@ var getTransfers = function(kioskId, callback){
 						sentAmount, \
 						senderk.nativeCurrency, \
 						statusCode, \
-						recipientClientId, \
+						recipient.passport AS recipientClientId, \
 						recipient.fullName AS recipientClientName, \
-						senderClientId, \
+						sender.passport AS senderClientId, \
 						sender.fullName AS senderClientName,\
 						recipientKioskId, \
 						recipientk.name AS recipientKioskName, \
@@ -125,9 +125,9 @@ var getPayouts = function(kioskId, callback){
 						sentAmount, \
 						recipientk.nativeCurrency AS payoutCurrency, \
 						statusCode, \
-						recipientClientId, \
+						recipient.passport AS recipientClientId, \
 						recipient.fullName AS recipientClientName, \
-						senderClientId, \
+						sender.passport AS senderClientId, \
 						sender.fullName AS senderClientName,\
 						senderKioskId, \
 						senderk.name AS senderKioskName \
@@ -178,7 +178,7 @@ var getOwing = function(kioskId, clientId, callback){
 						INNER JOIN Kiosk recipientk ON recipientKioskId = recipientk.kioskId \
 						INNER JOIN Client recipient ON recipientClientId = recipient.clientId \
 						WHERE recipientk.kioskId = ? \
-						AND recipient.clientId = ? \
+						AND recipient.passport = ? \
 						AND statusCode = 0',  // Only uncollected payouts
 		[kioskId, clientId], function(err, rows){
 		if(err)
@@ -198,7 +198,8 @@ var payoutProc = function(kioskId, clientId, callback){
 					START TRANSACTION; \
 					SELECT senderKioskId \
 						FROM Transfer \
-						WHERE 	recipientClientId = ? \
+						INNER JOIN Client ON Transfer.recipientClientId = Client.clientId \
+						WHERE 	passport = ? \
 								AND recipientKioskId = ? \
 								AND statusCode = 0;	\
 					CALL payout(?, ?, @a, @c); \
@@ -253,6 +254,28 @@ var bookProc = function(senderKioskId, senderClientId, recipientKioskId, recipie
 	});
 }*/
 
+var reset = function(callback) {
+	connection.query(	' \
+						UPDATE Account SET Amount = 10000000 WHERE accountId = 8; \
+						UPDATE Account SET Amount = 0 WHERE accountId = 9; \
+						UPDATE Account SET Amount = 10 WHERE accountId = 10; \
+						UPDATE Account SET Amount = 0 WHERE accountId = 11; \
+						UPDATE Account SET Amount = 100000 WHERE accountId = 12; \
+						UPDATE Account SET Amount = 0 WHERE accountId = 13; \
+						DELETE FROM Transfer;',
+		[], function(err, rows){
+		if(err)
+		{
+			console.log(err);
+			callback(null);
+		}
+		else
+		{
+			callback(rows);
+		}
+	});
+}
+
 exports.connect = connect;
 exports.getUser = getUser;
 exports.getKioskAccounts = getKioskAccounts;
@@ -263,3 +286,4 @@ exports.getCBAccounts = getCBAccounts;
 exports.getOwing = getOwing;
 exports.payoutProc = payoutProc;
 exports.bookProc = bookProc;
+exports.reset = reset;

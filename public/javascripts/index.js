@@ -168,6 +168,7 @@ function book() {
 		}
 		else {
 			clearBookingInput();
+			scrollToId('transferList', -60);
 		}		
 	});
 }
@@ -219,6 +220,12 @@ function showQuestionDialog(text, title, callback) {
                     {caption: 'Cancel', callback: function() { callback(false); }}
                 ]
 	});
+}
+
+function scrollToId(id, offset) {
+	$('html,body').animate({
+        scrollTop: $("#" + id).offset().top + offset},
+        'fast');
 }
 
 $(document).ready(function(){

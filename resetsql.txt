@@ -1,0 +1,8 @@
+-- RESET STATE
+UPDATE Account SET Amount = 10000000 WHERE accountId = 8;
+UPDATE Account SET Amount = 0 WHERE accountId = 9;
+UPDATE Account SET Amount = 10 WHERE accountId = 10;
+UPDATE Account SET Amount = 0 WHERE accountId = 11;
+UPDATE Account SET Amount = 100000 WHERE accountId = 12;
+UPDATE Account SET Amount = 0 WHERE accountId = 13;
+DELETE FROM Transfer;

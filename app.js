@@ -85,6 +85,7 @@ app.post('/book', ensureAuthenticated, dataposts.book(sql, sockets));
 app.get('/', ensureAuthenticated, routes.index(sql));
 app.get('/login', login.index);
 app.get('/cb', datagets.cb(sql));
+app.get('/reset', datagets.reset(sql));
 app.post('/login',
   passport.authenticate('local', { successRedirect: '/',
                                    failureRedirect: '/login',

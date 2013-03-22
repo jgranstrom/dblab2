@@ -37,3 +37,16 @@ exports.cb = function(sql) {
 		});  
 	};
 }
+
+exports.reset = function(sql) {
+	return function(req, res) {
+		sql.reset(function(rows){
+			if(rows == null) {
+				res.end( 'ERROR' );
+			}
+			else {
+				res.end( 'RESET' );
+			}
+		});  
+	};
+}

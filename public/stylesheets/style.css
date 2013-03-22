@@ -332,8 +332,8 @@ select option.dis {
   font-family: 'Quicksand';
   font-size: 22px;
   line-height: 36px;
-  width: 380px;
-  margin-left: 10px;
+  width: 390px;
+  margin-left: 0px;
   overflow-x: hidden;
 }
 .threepartcont {
